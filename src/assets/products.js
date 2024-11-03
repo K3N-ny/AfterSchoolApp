@@ -5,6 +5,8 @@ let products = [
         "location" : "London",
         "price" :  100,
         "images" : "/images/book-solid.svg",
+        "spaces" :  5,
+
 
 
     },
@@ -14,6 +16,7 @@ let products = [
         "location" : "Paris",
         "price" :   200,
         "images" : "/images/try.jpg",
+        "spaces" :  5,
 
     },
     {   
@@ -22,6 +25,7 @@ let products = [
         "location" : "Tokyo",
         "price" :   300,
         "images" : "/images/try.jpg",
+        "spaces" :  5,
 
     },
     {
@@ -30,6 +34,7 @@ let products = [
         "location" : "New York",
         "price" :   400,
         "images" : "/images/try.jpg",
+        "spaces" :  5,
     }
 
 ]

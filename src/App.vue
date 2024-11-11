@@ -1,7 +1,7 @@
 <template>
  <div id="app">
   <div class="container">
-    <button> {{ cartCount }} checkout</button><br><br>
+    <button v-on:click="showCheckout" :disabled="isCartEmpty"> {{ cartCount }} checkout</button><br><br>
     <input type="search" placeholder="Search here"><input type="button"  value="Search">
     <h3>VIEW</h3><br>
     <label>Ascending</label><input type="checkbox" value="ascending"> <label>Descending</label> <input  type="checkbox" value="descending">
@@ -11,6 +11,7 @@
     <label>Location</label><input type="checkbox" value="location">
     <label>Price</label><input type="checkbox" value="price">
     <label>Space</label><input type="checkbox" value="space">
+    <div v-if="showProduct">
        <div v-for="products in products">
       <!-- product information gotten from the products.js -->
 
@@ -23,7 +24,25 @@
      
       <button v-on:click="add(products)" v-if="canAdd(products)"> Add to cart</button>
       <button disabled='disabled' v-else>
-        Add to cart </button>
+        Sold Out </button>
+      </div>
+      
+    </div>
+    <div v-else> 
+      
+      <form>
+        <h2> CHECKOUT PAGE</h2>
+        <label>First name:</label>
+        <input type="text" v-model="firstName" required>
+        <label>Last name:</label>
+        <input type="text" v-model="lastName" required>
+        <label>Address:</label>
+        <input type="text" v-model="address" required>
+        <label>Phone number:</label>
+        <input type="text" v-model="phoneNumber" required>
+        <label>Email:</label>
+        <input type="email" v-model="email" required>
+      </form>
     </div>
 
   </div>
@@ -38,15 +57,34 @@ import products from '@/assets/products.js';
     data() {
       return {
       products: products,  
-      cart:[ ],   
+      cart:[],
+      showProduct:true,
+      firstName: '',
+      lastName: '',
+      address: '',
+      phoneNumber: '',
+      email: ''
     };
   },
   
   methods:{
-    // pushing the products into cart array
-    add(products){
-      this.cart.push(products.id);
+  // pushing the products into cart array
+     add(products){
+     this.cart.push(products.id),  
+      products.spaces --;
+    
+    },
 
+    // showCheckout() {
+    //   this.showProduct = !this.isCartEmpty;  // Only show checkout if cart is not empty
+    // }
+    // 
+
+    // },
+    showCheckout(){
+      if (this.cart.length > 0) {
+        this.showProduct = false;
+      }
     }
   },
   computed: {
@@ -55,6 +93,9 @@ import products from '@/assets/products.js';
       return this.cart.length;
       
   },
+  isCartEmpty() {
+      return this.cart.length === 0; // Check if cart is empty
+    },
   // if the spaces left are zero
   canAdd(){
     // return this.products.spaces > this.cartCount;

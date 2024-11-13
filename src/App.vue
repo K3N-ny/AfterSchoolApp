@@ -1,18 +1,24 @@
 <template>
  <div id="app">
   <div class="container">
-    <button v-on:click="showCheckout" :disabled="isCartEmpty"> {{ cartCount }} checkout</button><br><br>
+    <button v-on:click="showCheckout" :disabled="isCartEmpty"> {{ cartCount }} checkout</button>
+    <br>
+    <br>
     <input type="search" placeholder="Search here"><input type="button"  value="Search">
-    <h3>VIEW</h3><br>
-    <label>Ascending</label><input type="checkbox" value="ascending"> <label>Descending</label> <input  type="checkbox" value="descending">
+
+    <h3>VIEW</h3>
+    <br>
+    <label>Ascending</label><input type="radio" v-model="order" value="ascending"> <label>Descending</label> <input  type="radio" v-model="order" value="descending">
     <br>
     <h3> SORT</h3><br>
-    <label>Subject</label><input type="checkbox" value="subject">
-    <label>Location</label><input type="checkbox" value="location">
-    <label>Price</label><input type="checkbox" value="price">
-    <label>Space</label><input type="checkbox" value="space">
+    <label>Subject</label><input type="radio" v-model="sort" value="subject">
+    <label>Location</label><input type="radio" v-model="sort" value="location">
+    <label>Price</label><input type="radio" v-model="sort" value="price">
+    <label>Space</label><input type="radio" v-model="sort" value="space">
+
+
     <div v-if="showProduct">
-       <div v-for="products in products">
+       <div v-for="products in sortProducts">
       <!-- product information gotten from the products.js -->
 
       <img :src="products.images" alt="products.name" class="image"/>
@@ -28,6 +34,7 @@
       </div>
       
     </div>
+
     <div v-else> 
       
       <form>
@@ -63,7 +70,9 @@ import products from '@/assets/products.js';
       lastName: '',
       address: '',
       phoneNumber: '',
-      email: ''
+      email: '',
+      sort: 'price', 
+      order: 'ascending'
     };
   },
   
@@ -92,9 +101,9 @@ import products from '@/assets/products.js';
     cartCount() {
       return this.cart.length;
       
-  },
+ },
   isCartEmpty() {
-      return this.cart.length === 0; // Check if cart is empty
+      return this.cart.length === 0; // Check if cart is empty, then disables the button
     },
   // if the spaces left are zero
   canAdd(){
@@ -105,9 +114,18 @@ import products from '@/assets/products.js';
         return countInCart < products.spaces;
   }
    
+},
+sortProducts(){
+  return [...this.products].sort((a, b) => {
+    let result = 0;
+    if (a[this.sort] < b[this.sort]) result =-1;
+    if (a[this.sort] > b[this.sort]) result = 1;
+  
+  
+  return this.order === 'descending' ? -result : result;
+ });
 }
- }
- }
+ }}
 </script>
 <style>
 .image{

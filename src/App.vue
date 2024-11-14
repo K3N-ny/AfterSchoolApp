@@ -1,7 +1,7 @@
 <template>
  <div id="app">
   <div class="container">
-    <button v-on:click="showCheckout" :disabled="isCartEmpty"> {{ cartCount }} checkout</button>
+    <button v-on:click="showCart" :disabled="isCartEmpty"> {{ cartCount }} cart</button>
     <br>
     <br>
     <input type="search" placeholder="Search here"><input type="button"  value="Search">
@@ -18,38 +18,43 @@
 
 
     <div v-if="showProduct">
-       <div v-for="products in sortProducts">
-      <!-- product information gotten from the products.js -->
+        <div v-for="products in sortProducts">
+          <!-- product information gotten from the products.js -->
+          
+          <img :src="products.images" alt="products.name" class="image"/>
+          <p> Subject: {{ products.subject }}</p>
+          <p> Location: {{ products.location }}</p>
+          <p> Price: £{{ products.price }}</p>
+          <p> Spaces: {{ products.spaces }}</p>
+          <!-- add to cart -->
+          
+          <button v-on:click="add(products)" v-if="canAdd(products)"> Add to cart</button>
+          <button disabled='disabled' v-else>
+            Sold Out </button>
+          </div>
+          
+        </div>
+    
+    <div v-else > 
+      <div v-for="(products, index) in cart" :key="index">
+        <h3>{{ products.subject }}</h3>
+        <p>{{ products.price }}</p>
+        
 
-      <img :src="products.images" alt="products.name" class="image"/>
-      <p> Subject: {{ products.subject }}</p>
-      <p> Location: {{ products.location }}</p>
-      <p> Price: £{{ products.price }}</p>
-      <p> Spaces: {{ products.spaces }}</p>
-      <!-- add to cart -->
-     
-      <button v-on:click="add(products)" v-if="canAdd(products)"> Add to cart</button>
-      <button disabled='disabled' v-else>
-        Sold Out </button>
       </div>
-      
-    </div>
-
-    <div v-else> 
-      
       <form>
-        <h2> CHECKOUT PAGE</h2>
-        <label>First name:</label>
-        <input type="text" v-model="firstName" required>
-        <label>Last name:</label>
-        <input type="text" v-model="lastName" required>
-        <label>Address:</label>
-        <input type="text" v-model="address" required>
+        <h2> BILLING ADDRESS</h2>
+        <label>Name:</label>
+        <input type="text" v-model="Name" required><br>
         <label>Phone number:</label>
-        <input type="text" v-model="phoneNumber" required>
+        <input type="text" v-model="phoneNumber" required><br>
         <label>Email:</label>
         <input type="email" v-model="email" required>
       </form>
+
+      
+      
+
     </div>
 
   </div>
@@ -83,20 +88,22 @@ import products from '@/assets/products.js';
       products.spaces --;
     
     },
-
+    
     // showCheckout() {
-    //   this.showProduct = !this.isCartEmpty;  // Only show checkout if cart is not empty
-    // }
-    // 
-
-    // },
-    showCheckout(){
-      if (this.cart.length > 0) {
-        this.showProduct = false;
-      }
-    }
+      //   this.showProduct = !this.isCartEmpty;  // Only show checkout if cart is not empty
+      // }
+      // 
+      
+      // },
+      showCart(){
+        if (this.cart.length > 0) {
+          this.showProduct = !this.showProduct;
+        }
+      },
+      
   },
-  computed: {
+  
+    computed: {
     // display the number of items in the cart
     cartCount() {
       return this.cart.length;

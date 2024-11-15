@@ -35,25 +35,23 @@
           
         </div>
     
-    <div v-else > 
+    <div v-else >
+    <h2>Cart</h2> 
       <div v-for="(products, index) in cart" :key="index">
         <h3>{{ products.subject }}</h3>
         <p>{{ products.price }}</p>
-        
+        <button @click="deleteCart(index)"> X </button>
 
       </div>
       <form>
         <h2> BILLING ADDRESS</h2>
         <label>Name:</label>
-        <input type="text" v-model="Name" required><br>
+        <input type="text" v-model="Name"><br>
         <label>Phone number:</label>
-        <input type="text" v-model="phoneNumber" required><br>
-        <label>Email:</label>
-        <input type="email" v-model="email" required>
+        <input type="text" v-model="phoneNumber"><br>
+        <button type="submit" :disabled="!isCheckoutEnabled">Checkout</button>
       </form>
-
-      
-      
+     
 
     </div>
 
@@ -71,9 +69,7 @@ import products from '@/assets/products.js';
       products: products,  
       cart:[],
       showProduct:true,
-      firstName: '',
-      lastName: '',
-      address: '',
+      Name: '',
       phoneNumber: '',
       email: '',
       sort: 'price', 
@@ -84,31 +80,33 @@ import products from '@/assets/products.js';
   methods:{
   // pushing the products into cart array
      add(products){
-     this.cart.push(products.id),  
+     this.cart.push(products),  
       products.spaces --;
     
     },
     
-    // showCheckout() {
-      //   this.showProduct = !this.isCartEmpty;  // Only show checkout if cart is not empty
-      // }
-      // 
-      
-      // },
+         
+      //cart button only enabled when there is one or more products in it
       showCart(){
         if (this.cart.length > 0) {
           this.showProduct = !this.showProduct;
+
         }
+      },
+      deleteCart(index) {
+        const removedProduct = this.cart.splice(index, 1)[0];
+      const originalProduct = this.products.find((p) => p.id === removedProduct.id);
+      if (originalProduct) originalProduct.spaces++; // Restore the spaces for the removed product
       },
       
   },
   
-    computed: {
+  computed: {
     // display the number of items in the cart
     cartCount() {
       return this.cart.length;
       
- },
+  },
   isCartEmpty() {
       return this.cart.length === 0; // Check if cart is empty, then disables the button
     },
@@ -122,6 +120,11 @@ import products from '@/assets/products.js';
   }
    
 },
+isCheckoutEnabled() {
+  return this.Name.trim() !== "" && this.phoneNumber.trim() !== "";
+  
+
+ },
 sortProducts(){
   return [...this.products].sort((a, b) => {
     let result = 0;
@@ -131,8 +134,10 @@ sortProducts(){
   
   return this.order === 'descending' ? -result : result;
  });
-}
- }}
+}, 
+
+    }
+ }
 </script>
 <style>
 .image{

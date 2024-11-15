@@ -6,18 +6,18 @@
     <br>
     <input type="search" placeholder="Search here"><input type="button"  value="Search">
 
-    <h3>VIEW</h3>
-    <br>
-    <label>Ascending</label><input type="radio" v-model="order" value="ascending"> <label>Descending</label> <input  type="radio" v-model="order" value="descending">
-    <br>
-    <h3> SORT</h3><br>
-    <label>Subject</label><input type="radio" v-model="sort" value="subject">
-    <label>Location</label><input type="radio" v-model="sort" value="location">
-    <label>Price</label><input type="radio" v-model="sort" value="price">
-    <label>Space</label><input type="radio" v-model="sort" value="space">
-
-
+    
+    
     <div v-if="showProduct">
+      <h3>VIEW</h3>
+      <br>
+      <label>Ascending</label><input type="radio" v-model="order" value="ascending"> <label>Descending</label> <input  type="radio" v-model="order" value="descending">
+      <br>
+      <h3> SORT</h3><br>
+      <label>Subject</label><input type="radio" v-model="sort" value="subject">
+      <label>Location</label><input type="radio" v-model="sort" value="location">
+      <label>Price</label><input type="radio" v-model="sort" value="price">
+      <label>Space</label><input type="radio" v-model="sort" value="space">
         <div v-for="products in sortProducts">
           <!-- product information gotten from the products.js -->
           
@@ -47,8 +47,10 @@
         <h2> BILLING ADDRESS</h2>
         <label>Name:</label>
         <input type="text" v-model="Name"><br>
+        <span v-if="nameError" class="error">{{ nameError }}</span><br>
         <label>Phone number:</label>
         <input type="text" v-model="phoneNumber"><br>
+        <span v-if="phoneError" class="error">{{ phoneError }}</span><br>
         <button type="submit" :disabled="!isCheckoutEnabled">Checkout</button>
       </form>
      
@@ -72,7 +74,9 @@ import products from '@/assets/products.js';
       Name: '',
       phoneNumber: '',
       sort: 'price', 
-      order: 'ascending'
+      order: 'ascending',
+      nameError: '',
+      phoneError: '',
     };
   },
   
@@ -98,15 +102,34 @@ import products from '@/assets/products.js';
       if (originalProduct) originalProduct.spaces++; // Restore the spaces for the removed product
       },
       submitForm(){
+        
+      // Reset errors
+      this.nameError = '';
+      this.phoneError = '';
+      
+      const namePattern = /^[A-Za-z\s]+$/;  // Allows letters and spaces
+      const phonePattern = /^[0-9]+$/;     // Allows only numbers
+
+      if (!namePattern.test(this.Name.trim())) {
+        this.nameError = 'Name must contain letters only.';
+      }
+
+      if (!phonePattern.test(this.phoneNumber.trim())) {
+        this.phoneError = 'Phone number must contain numbers only.';
+      }
+
+      if (!this.nameError && !this.phoneError) {
+        // If no errors, proceed with form submission
         console.log("Billing Information:", {
           Name: this.Name,
           phoneNumber: this.phoneNumber,
-        });
-        alert('Form submitted');
+      });
+      this.cart = [];
+      alert('Order has been submitted');
         this.Name = "";
         this.phoneNumber = "";
       }
-      
+    } 
   },
   
   computed: {
@@ -129,7 +152,7 @@ import products from '@/assets/products.js';
    
 },
 isCheckoutEnabled() {
-  return this.Name.trim() !== "" && this.phoneNumber.trim() !== "";
+ return ( this.Name.trim() !== "" && this.phoneNumber.trim() !== "")
   
 
  },

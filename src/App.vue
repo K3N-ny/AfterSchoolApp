@@ -43,7 +43,7 @@
         <button @click="deleteCart(index)"> X </button>
 
       </div>
-      <form>
+      <form @submit.prevent="submitForm">
         <h2> BILLING ADDRESS</h2>
         <label>Name:</label>
         <input type="text" v-model="Name"><br>
@@ -71,7 +71,6 @@ import products from '@/assets/products.js';
       showProduct:true,
       Name: '',
       phoneNumber: '',
-      email: '',
       sort: 'price', 
       order: 'ascending'
     };
@@ -98,6 +97,15 @@ import products from '@/assets/products.js';
       const originalProduct = this.products.find((p) => p.id === removedProduct.id);
       if (originalProduct) originalProduct.spaces++; // Restore the spaces for the removed product
       },
+      submitForm(){
+        console.log("Billing Information:", {
+          Name: this.Name,
+          phoneNumber: this.phoneNumber,
+        });
+        alert('Form submitted');
+        this.Name = "";
+        this.phoneNumber = "";
+      }
       
   },
   

@@ -4,7 +4,12 @@
     <button v-on:click="showCart" :disabled="isCartEmpty"> {{ cartCount }} cart</button>
     <br>
     <br>
-    <input type="search" placeholder="Search here"><input type="button"  value="Search">
+    <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="Search here"
+      />
+      <button @click="clearSearch" v-if="searchQuery" >Clear</button>
 
     
     
@@ -18,7 +23,10 @@
       <label>Location</label><input type="radio" v-model="sort" value="location">
       <label>Price</label><input type="radio" v-model="sort" value="price">
       <label>Space</label><input type="radio" v-model="sort" value="space">
-        <div v-for="products in sortProducts">
+      <div v-if="sortProducts.length">
+        <div v-for="product in sortProducts" :key="product.id">  
+      
+      <div v-for="products in sortProducts">
           <!-- product information gotten from the products.js -->
           
           <img :src="products.images" alt="products.name" class="image"/>
@@ -34,6 +42,12 @@
           </div>
           
         </div>
+      
+        </div>
+        <div v-else>
+          <p>No products match your search.</p>
+        </div>
+      </div>
     
     <div v-else >
     <h2>Cart</h2> 
@@ -51,7 +65,7 @@
         <label>Phone number:</label>
         <input type="text" v-model="phoneNumber"><br>
         <span v-if="phoneError" class="error">{{ phoneError }}</span><br>
-        <button type="submit" :disabled="!isCheckoutEnabled">Checkout</button>
+        <button type="submit" :disabled="!isCheckoutEnabled || isSubmitting">{{ isSubmitting ? 'Submitting...' : 'Checkout' }}</button>
       </form>
      
 
@@ -77,6 +91,7 @@ import products from '@/assets/products.js';
       order: 'ascending',
       nameError: '',
       phoneError: '',
+      searchQuery: ''
     };
   },
   
@@ -86,6 +101,9 @@ import products from '@/assets/products.js';
      this.cart.push(products),  
       products.spaces --;
     
+    },
+    clearSearch() {
+      this.searchQuery = ''; // Reset search query
     },
     
          
@@ -103,33 +121,72 @@ import products from '@/assets/products.js';
       },
       submitForm(){
         
-      // Reset errors
-      this.nameError = '';
-      this.phoneError = '';
+        
+        // Reset errors
+        this.nameError = '';
+        this.phoneError = '';
+        
+        const namePattern = /^[A-Za-z\s]+$/;  // Allows letters and spaces
+        const phonePattern = /^[0-9]+$/;     // Allows only numbers
+  
+        if (!namePattern.test(this.Name.trim())) {
+          this.nameError = 'Name must contain letters only.';
+        }
+  
+        if (!phonePattern.test(this.phoneNumber.trim())) {
+          this.phoneError = 'Phone number must contain numbers only.';
+        }
+  
+        if (!this.nameError && !this.phoneError) {
+          // If no errors, proceed with form submission
+          const order = {
+        customer: {
+          name: this.Name,
+          phone: this.phoneNumber,
+        },
+        items: this.cart.map(product => ({
+          id: product.id,
+          subject: product.subject,
+          price: product.price,
+          quantity: 1, // Assuming quantity is 1 for each product
+        })),
+        total: this.cart.reduce((sum, product) => sum + product.price, 0),
+      };
+  
+      // Make POST request to backend
+      fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to submit order");
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Order submitted:", data);
+          alert(data.message || "Order placed successfully!");
+          
+  
+          // Clear cart and reset form
+          this.cart = [];
+          this.Name = "";
+          this.phoneNumber = "";
+          this.showProduct = true;
+        })
+        .catch(error => {
+          alert("Failed to submit order. Please try again.");
+        })
+        .finally(() => {
+          this.isSubmitting = false; // Stop loading indicator
+        }
+        );
+    
+        }
+      } 
       
-      const namePattern = /^[A-Za-z\s]+$/;  // Allows letters and spaces
-      const phonePattern = /^[0-9]+$/;     // Allows only numbers
-
-      if (!namePattern.test(this.Name.trim())) {
-        this.nameError = 'Name must contain letters only.';
-      }
-
-      if (!phonePattern.test(this.phoneNumber.trim())) {
-        this.phoneError = 'Phone number must contain numbers only.';
-      }
-
-      if (!this.nameError && !this.phoneError) {
-        // If no errors, proceed with form submission
-        console.log("Billing Information:", {
-          Name: this.Name,
-          phoneNumber: this.phoneNumber,
-      });
-      this.cart = [];
-      alert('Order has been submitted');
-        this.Name = "";
-        this.phoneNumber = "";
-      }
-    } 
   },
   
   computed: {
@@ -157,14 +214,29 @@ isCheckoutEnabled() {
 
  },
 sortProducts(){
-  return [...this.products].sort((a, b) => {
-    let result = 0;
-    if (a[this.sort] < b[this.sort]) result =-1;
-    if (a[this.sort] > b[this.sort]) result = 1;
+  const searchQuery = this.searchQuery.toLowerCase();
+      const filtered = this.products.filter((product) => {
+        return (
+          product.subject.toLowerCase().includes(searchQuery) ||
+        product.location.toLowerCase().includes(searchQuery) ||
+        product.price.toString().includes(searchQuery) || 
+        product.spaces.toString().includes(searchQuery)
+        );
+      });
+      return filtered.sort((a, b) => {
+        let result = 0;
+        if (a[this.sort] < b[this.sort]) result = -1;
+        if (a[this.sort] > b[this.sort]) result = 1;
+        return this.order === 'descending' ? -result : result;
+      });
+//   return [...this.products].sort((a, b) => {
+//     let result = 0;
+//     if (a[this.sort] < b[this.sort]) result =-1;
+//     if (a[this.sort] > b[this.sort]) result = 1;
   
   
-  return this.order === 'descending' ? -result : result;
- });
+//   return this.order === 'descending' ? -result : result;
+//  });
 }, 
 
     }

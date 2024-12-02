@@ -1,6 +1,6 @@
 let products = [
     {
-        "id": 1001,
+        "id": 1,
         "subject"  : "Math",
         "location" : "London",
         "price" :  100,
@@ -11,7 +11,7 @@ let products = [
 
     },
     {  
-        "id": 1002,
+        "id": 2,
         "subject"  : "Science",
         "location" : "Paris",
         "price" :   200,
@@ -20,7 +20,7 @@ let products = [
 
     },
     {   
-        "id": 1003,
+        "id": 3,
         "subject"  : "History",
         "location" : "Tokyo",
         "price" :   300,
@@ -29,7 +29,7 @@ let products = [
 
     },
     {
-        "id": 1004,
+        "id": 4,
         "subject"  : "Geography",
         "location" : "New York",
         "price" :   400,
@@ -37,7 +37,7 @@ let products = [
         "spaces" :  5
     },
     {
-        "id": 1005,
+        "id": 5,
         "subject"  : "Math",
         "location" : "New York",
         "price" :  200,
@@ -48,7 +48,7 @@ let products = [
 
     },
     {
-        "id": 1006,
+        "id": 6,
         "subject"  : "Geography",
         "location" : "London",
         "price" :  500,
@@ -59,7 +59,7 @@ let products = [
 
     },
     {
-        "id": 1007,
+        "id": 7,
         "subject"  : "History",
         "location" : "Paris",
         "price" :  200,
@@ -70,7 +70,7 @@ let products = [
 
     },
     {
-        "id": 1008,
+        "id": 8,
         "subject"  : "English",
         "location" : "Berlin",
         "price" :  100,
@@ -81,7 +81,7 @@ let products = [
 
     },
     {
-        "id": 1009,
+        "id": 9,
         "subject"  : "Math",
         "location" : "Tokyo",
         "price" :  150,
@@ -92,7 +92,7 @@ let products = [
 
     },
     {
-        "id": 1010,
+        "id": 10,
         "subject"  : "History",
         "location" : "Tokyo",
         "price" :  300,

@@ -4,8 +4,8 @@ let products = [
         "subject"  : "Math",
         "location" : "London",
         "price" :  100,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/Maths.jpg",
+        "spaces" :  20
 
 
 
@@ -15,8 +15,8 @@ let products = [
         "subject"  : "Science",
         "location" : "Paris",
         "price" :   200,
-        "images" : "/images/try.jpg",
-        "spaces" :  5
+        "images" : "/images/Science.jpg",
+        "spaces" :  6
 
     },
     {   
@@ -24,8 +24,8 @@ let products = [
         "subject"  : "History",
         "location" : "Tokyo",
         "price" :   300,
-        "images" : "/images/try.jpg",
-        "spaces" :  5
+        "images" : "/images/History.jpg",
+        "spaces" :  7
 
     },
     {
@@ -33,7 +33,7 @@ let products = [
         "subject"  : "Geography",
         "location" : "New York",
         "price" :   400,
-        "images" : "/images/try.jpg",
+        "images" : "/images/Geography.jpg",
         "spaces" :  5
     },
     {
@@ -41,8 +41,8 @@ let products = [
         "subject"  : "Math",
         "location" : "New York",
         "price" :  200,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/Maths2.jpg",
+        "spaces" :  8
 
 
 
@@ -52,8 +52,8 @@ let products = [
         "subject"  : "Geography",
         "location" : "London",
         "price" :  500,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/Geography2.jpg",
+        "spaces" :  12
 
 
 
@@ -63,8 +63,8 @@ let products = [
         "subject"  : "History",
         "location" : "Paris",
         "price" :  200,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/History2.jpg",
+        "spaces" :  9
 
 
 
@@ -74,8 +74,8 @@ let products = [
         "subject"  : "English",
         "location" : "Berlin",
         "price" :  100,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/English.jpg",
+        "spaces" :  10
 
 
 
@@ -85,8 +85,8 @@ let products = [
         "subject"  : "Math",
         "location" : "Tokyo",
         "price" :  150,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/Maths3.jpg",
+        "spaces" :  7
 
 
 
@@ -96,8 +96,8 @@ let products = [
         "subject"  : "History",
         "location" : "Tokyo",
         "price" :  300,
-        "images" : "/images/book-solid.svg",
-        "spaces" :  5
+        "images" : "/images/History.jpg",
+        "spaces" :  15
 
 
 
